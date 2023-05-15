@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Laba5</string>
+    <string name="hello" translatable="false">Информация о курьере</string>
+</resources>
