@@ -1,12 +1,24 @@
 package com.example.laba5;
 
 public class Documents extends Package{
-    private final String size = "D";
-    private boolean fragile;
-    private String arriveReq = "recipient name";
-    private String info;
+    public Documents(String from, String to) {
+        super(from, to);
+        this.fragility = false;
+        this.from = from;
+        this.to = to;
+    }
 
-    public Documents(String size, boolean fragile, String arriveReq) {
-        super(size, fragile, arriveReq);
+
+    //геттеры
+    public String getFrom() {
+        return from;
+    }
+
+    public String getTo() {
+        return to;
+    }
+
+    public String getType() {
+        return "Д";
     }
 }

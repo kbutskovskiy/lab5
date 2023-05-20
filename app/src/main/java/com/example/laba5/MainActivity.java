@@ -1,101 +1,132 @@
 package com.example.laba5;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.util.SparseBooleanArray;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends Activity implements OnClickListener{
+import java.util.ArrayList;
 
-    Firm firm1 = new Firm("DHL", "Pushkina stret Kolotushkino house");
-    Package Package1 = new Big("B", false, "Car");
-    Package Package2 = new Big("S", true, "none");
-    Package Package3 = new Big("D", false, "recipient name");
-    Order order1 = new Order(firm1, Package1, "Москва", "Питер", 500);
-    Order order2 = new Order(firm1, Package2, "Омск", "Сочи", 300);
-    Order order3 = new Order(firm1, Package3, "Пермь", "Орел", 100);
-    String[] firmNames = {
-            order1.getFirm().getName(), order2.getFirm().getName(), order3.getFirm().getName()
-    };
-    String[] packType = {
-            order1.getPackage().getSize(), order2.getPackage().getSize(), order3.getPackage().getSize()
-    };
-    String[] sourceAddress = {
-            order1.getSourceAddress(), order2.getSourceAddress(), order3.getSourceAddress()
-    };
-    String[] destinationAddress = {
-            order1.getDestinationAddress(), order2.getDestinationAddress(), order3.getDestinationAddress()
-    };
-    String[] orderPrice = {
-            Integer.toString(order1.getPrice()), Integer.toString(order2.getPrice()), Integer.toString(order3.getPrice())
-    };
-    ListView price;
+public class MainActivity extends AppCompatActivity {
+
+    //курьер
+    Courier courier = new Courier("Буцковский Кирилл Антонович", "55555555228");
+
+    //посылки
+    SmallPackage clock = new SmallPackage("30*40*50", false, "Самара", "Сочи");
+    SmallPackage keys = new SmallPackage("10*10*40", true, "Томск", "Москва");
+    Documents document = new Documents("Киров", "Самара");
+    BigPackage playstation = new BigPackage("100*70*80", false, 10, "Москва", "Благовещенск");
+    BigPackage chair = new BigPackage("100*100*100", false, 5, "Хабаровск", "Новокузнецк");
+    SmallPackage tshirt = new SmallPackage("10*10*2", false, "Москва", "Санкт-Петербург");
+    SmallPackage sneakers = new SmallPackage("30*20*10", false, "Казань", "Владивосток");
+    SmallPackage flashDrive = new SmallPackage("5*5*1", true, "Сочи", "Красноярск");
+    BigPackage tv = new BigPackage("100*70*10", false, 20, "Уфа", "Мурманск");
+    BigPackage laptop = new BigPackage("40*30*5", false, 3, "Саратов", "Ростов-на-Дону");
+    BigPackage phone = new BigPackage("15*8*1", false, 1, "Калининград", "Тула");
+    BigPackage battery = new BigPackage("20*20*10", true, 2, "Тверь", "Нижний Новгород");
+
+    //компании
+    Company yandex = new Company("Yandex", "Москва, ул. Льва Толстого, 16");
+    Company google = new Company("Google", "America");
+    Company ozon = new Company("Ozon", "Москва, Пресненская Набережная 10");
+    Company avito = new Company("Avito", "Москва, Лесная улица, 7, А");
+    Company amazon = new Company("Amazon", "Seattle, WA, USA");
+    Company apple = new Company("Apple", "Cupertino, CA, USA");
+    Company ebay = new Company("Ebay", "San Jose, CA, USA");
+
+    //заказы
+    Order order1 = new Order(yandex, keys, keys.getFrom(), keys.getTo(), 1200);
+    Order order2 = new Order(ozon, clock, clock.getFrom(), clock.getTo(), 1500);
+    Order order3 = new Order(google, document, document.getFrom(), document.getTo(), 1600);
+    Order order4 = new Order(google, playstation, playstation.getFrom(), playstation.getTo(), 3500);
+    Order order5 = new Order(avito, chair, chair.getFrom(), chair.getTo(), 5000);
+    Order order6 = new Order(amazon, tshirt, tshirt.getFrom(), tshirt.getTo(), 800);
+    Order order7 = new Order(apple, sneakers, sneakers.getFrom(), sneakers.getTo(), 1800);
+    Order order8 = new Order(ebay, flashDrive, flashDrive.getFrom(), flashDrive.getTo(), 300);
+    Order order9 = new Order(amazon, tv, tv.getFrom(), tv.getTo(), 4500);
+    Order order10 = new Order(apple, laptop, laptop.getFrom(), laptop.getTo(), 6000);
+    Order order11 = new Order(ebay, phone, phone.getFrom(), phone.getTo(), 4000);
+    Order order12 = new Order(amazon, battery, battery.getFrom(), battery.getTo(), 1500);
+
+    private ListView listView;
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ListView compName = (ListView) findViewById(R.id.compName);
-        ListView pType = (ListView) findViewById(R.id.pType);
-        ListView SA = (ListView) findViewById(R.id.SA);
-        ListView DA = (ListView) findViewById(R.id.DA);
-        price = (ListView) findViewById(R.id.price);
 
-        // находим список
-        price.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        // создаем адаптер
-        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, firmNames);
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, packType);
-        ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, sourceAddress);
-        ArrayAdapter<String> adapter4 = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, destinationAddress);
-        ArrayAdapter<String> adapter5 = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_multiple_choice, orderPrice);
-        // присваиваем адаптер списку
-        compName.setAdapter(adapter1);
-        pType.setAdapter(adapter2);
-        SA.setAdapter(adapter3);
-        DA.setAdapter(adapter4);
-        price.setAdapter(adapter5);
-        Button okButton = (Button) findViewById(R.id.okButton);
-        Button clearButton = (Button) findViewById(R.id.clearButton);
-        okButton.setOnClickListener((OnClickListener) this);
-        clearButton.setOnClickListener((OnClickListener) this);
-    }
+        TextView courier_name = findViewById(R.id.courier_name);
+        courier_name.setText(courier.getFIO());
 
-    @Override
-    public void onClick(View arg0) {
-        if (arg0.getId() == R.id.okButton) {
-            int summa = 0;
-            SparseBooleanArray sbArray = price.getCheckedItemPositions();
-            for (int i = 0; i < sbArray.size(); i++) {
-                int key = sbArray.keyAt(i);
-                if (sbArray.get(key)) {
-                    summa += Integer.parseInt(orderPrice[key]);
+        courier.setFeatures("Имеется личный автомобиль");
+
+        TextView features = findViewById(R.id.couruier_features);
+        features.setText(courier.getFeatures());
+
+        courier.addOrder(order1);
+        courier.addOrder(order2);
+        courier.addOrder(order3);
+        courier.addOrder(order4);
+        courier.addOrder(order5);
+        courier.addOrder(order6);
+        courier.addOrder(order7);
+        courier.addOrder(order8);
+        courier.addOrder(order9);
+        courier.addOrder(order10);
+        courier.addOrder(order11);
+        courier.addOrder(order12);
+
+
+        listView = findViewById(R.id.listView);
+
+        OrderAdapter adapter = new OrderAdapter(this, courier.getOrders());
+
+
+        listView.setAdapter(adapter);
+
+        Button btn_ok = findViewById(R.id.button_ok);
+        Button btn_clear = findViewById(R.id.button_clear);
+
+        btn_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                double result = 0;
+                for (int i = 0; i < adapter.getOrders().size(); i++) {
+                    if (adapter.getOrders().get(i).isSelected()) {
+                        result += Double.parseDouble(adapter.getOrders().get(i).getCost());
+                    }
                 }
+                showInfo(result);
             }
-            Toast toast = Toast.makeText(getApplicationContext(), "Общая сумма выбранных закахов: " + summa + " рублей",
-                    Toast.LENGTH_SHORT);
-            toast.show();
-        }
-        else{
-            ArrayAdapter<String> adapter5 = new ArrayAdapter<String>(this,
-                    android.R.layout.simple_list_item_multiple_choice, orderPrice);
-            price.setAdapter(adapter5);
-        }
+        });
+
+        btn_clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                for (int i = 0; i < adapter.getOrders().size(); i++) {
+                    adapter.getOrders().get(i).setSelected(false);
+                }
+                adapter.notifyDataSetChanged();
+
+            }
+        });
     }
+
+    private void showInfo(double cost) {
+        Toast.makeText(this, "Общая стоимость: " + cost, Toast.LENGTH_LONG).show();
+    }
+
 }

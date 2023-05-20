@@ -1,37 +1,43 @@
 package com.example.laba5;
 
 public abstract class Package {
-    private String size;
-    private boolean fragile;
-    private String arriveReq;
-
-    public Package(String size, boolean fragile, String arriveReq) {
-        this.size = size;
-        this.arriveReq = arriveReq;
-        this.fragile = fragile;
+    public Package(String from, String to) {
+        this.from = from;
+        this.to = to;
     }
 
-    public String getArriveReq() {
-        return arriveReq;
+    protected String from;
+    protected String to;
+    protected String size;
+    protected boolean fragility;
+    protected String requirements;
+
+    public void setRequirements(String requirements) {
+        this.requirements = requirements;
     }
 
-    public void setArriveReq(String arriveReq) {
-        this.arriveReq = arriveReq;
-    }
-
-    public boolean isFragile() {
-        return fragile;
-    }
-
-    public void setFragile(boolean fragile) {
-        this.fragile = fragile;
-    }
-
+    //геттеры
     public String getSize() {
         return size;
     }
 
-    public void setSize(String size) {
-        this.size = size;
+    public boolean isFragility() {
+        return fragility;
     }
+
+    public String getRequirements() {
+        return requirements;
+    }
+
+
+
+    public String getFrom() {
+        return from;
+    }
+
+    public String getTo() {
+        return to;
+    }
+
+    public abstract String getType();
 }

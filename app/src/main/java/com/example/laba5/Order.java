@@ -1,58 +1,49 @@
 package com.example.laba5;
 
 public class Order {
-    private Firm firm;
-    private Package Package;
-    private String sourceAddress;
-
-    public Order(Firm firm, Package Package, String sourceAddress, String destinationAddress, int price) {
-        this.firm = firm;
-        this.Package = Package;
-        this.price = price;
-        this.destinationAddress = destinationAddress;
-        this.sourceAddress = sourceAddress;
+    public Order(Company company, Package pack, String addrFrom, String addrTo, double cost) {
+        this.isSelected = false;
+        this.company = company;
+        this.pack = pack;
+        this.addrFrom = addrFrom;
+        this.addrTo = addrTo;
+        this.cost = cost;
     }
 
-    public int getPrice() {
-        return price;
+    private Company company;
+    private Package pack;
+    private String addrFrom;
+    private String addrTo;
+    private double cost;
+    private boolean isSelected;
+
+
+    //геттеры
+    public Company getCompany() {
+        return company;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
+    public Package getPack() {
+        return pack;
     }
 
-    public String getDestinationAddress() {
-        return destinationAddress;
+    public String getAddrFrom() {
+        return addrFrom;
     }
 
-    public void setDestinationAddress(String destinationAddress) {
-        this.destinationAddress = destinationAddress;
+    public String getAddrTo() {
+        return addrTo;
     }
 
-    public String getSourceAddress() {
-        return sourceAddress;
+    public String getCost() {
+        return Double.toString(cost);
     }
 
-    public void setSourceAddress(String sourceAddress) {
-        this.sourceAddress = sourceAddress;
+    public boolean isSelected() {
+        return isSelected;
     }
 
-    public com.example.laba5.Package getPackage() {
-        return Package;
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
-
-    public void setPackage(com.example.laba5.Package aPackage) {
-        Package = aPackage;
-    }
-
-    public Firm getFirm() {
-        return firm;
-    }
-
-    public void setFirm(Firm firm) {
-        this.firm = firm;
-    }
-
-    private String destinationAddress;
-    private int price;
 }
