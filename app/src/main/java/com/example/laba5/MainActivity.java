@@ -1,23 +1,24 @@
 package com.example.laba5;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
+//#TODO: В рамках одной сессии у курьера есть кнопка принять. Все заказы , которые были выбраны,
+//#TODO: уходят в меню курьера, которое можно посмотреть контекстное меню ContextMenu. И ещё в качестве админа возможность создать заказ.
+//#TODO: Подумать по поводу интерфейса Parcible (техническое требование)
 public class MainActivity extends AppCompatActivity {
 
     //курьер
@@ -61,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
     Order order12 = new Order(amazon, battery, battery.getFrom(), battery.getTo(), 1500);
 
     private ListView listView;
+    private OrderAdapter adapter;
+
+    private List<Order> selectedOrders = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,8 +94,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         listView = findViewById(R.id.listView);
+        registerForContextMenu(listView);
 
-        OrderAdapter adapter = new OrderAdapter(this, courier.getOrders());
+        adapter = new OrderAdapter(this, courier.getOrders());
 
 
         listView.setAdapter(adapter);
@@ -106,8 +111,13 @@ public class MainActivity extends AppCompatActivity {
                 for (int i = 0; i < adapter.getOrders().size(); i++) {
                     if (adapter.getOrders().get(i).isSelected()) {
                         result += Double.parseDouble(adapter.getOrders().get(i).getCost());
+                        selectedOrders.add(adapter.getOrders().get(i));
                     }
                 }
+                // Remove selected orders from courier's orders
+                courier.getOrders().removeAll(selectedOrders);
+                // Notify adapter to update the list view
+                adapter.notifyDataSetChanged();
                 showInfo(result);
             }
         });
@@ -123,10 +133,46 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        Button btn_show = findViewById(R.id.button_show);
+        registerForContextMenu(btn_show);
+        btn_show.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openContextMenu(v);
+            }
+        });
     }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        for (Order order : selectedOrders) {
+            menu.add(order.getCost());
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        if (item.getItemId() == R.id.add_to_menu) {
+            // вы можете добавить заказ в список заказов курьера и удалить его из доступных заказов
+            Order selectedOrder = adapter.getOrders().get(info.position);
+            courier.addOrder(selectedOrder);
+            adapter.getOrders().remove(info.position);
+            adapter.notifyDataSetChanged();
+            Toast.makeText(this, "Order added to the menu", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return super.onContextItemSelected(item);
+    }
+
+
 
     private void showInfo(double cost) {
         Toast.makeText(this, "Общая стоимость: " + cost, Toast.LENGTH_LONG).show();
     }
+
 
 }
