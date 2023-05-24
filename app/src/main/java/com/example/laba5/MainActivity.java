@@ -149,7 +149,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreateContextMenu(menu, v, menuInfo);
 
         for (Order order : selectedOrders) {
-            menu.add(order.getCost());
+            String menuTitle = "Тип: " + order.getPack().getType() + "; " + order.getAddrFrom() + " -> " + order.getAddrTo() + " " +
+                    ": " + order.getCost();
+            menu.add(Menu.NONE, Menu.NONE, Menu.NONE, menuTitle);
         }
     }
 
