@@ -18,8 +18,7 @@ import java.util.List;
 
 //#TODO: В рамках одной сессии у курьера есть кнопка принять. Все заказы , которые были выбраны,
 //#TODO: уходят в меню курьера, которое можно посмотреть контекстное меню ContextMenu. И ещё в качестве админа возможность создать заказ.
-//#TODO: Подумать по поводу интерфейса Parcible (техническое требование)
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NewOrderDialog.OnNewOrderListener{
 
     //курьер
     Courier courier = new Courier("Буцковский Кирилл Антонович", "55555555228");
@@ -142,6 +141,15 @@ public class MainActivity extends AppCompatActivity {
                 openContextMenu(v);
             }
         });
+
+        Button btnAdd = findViewById(R.id.button_add);
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NewOrderDialog newOrderDialog = new NewOrderDialog();
+                newOrderDialog.show(getSupportFragmentManager(), "newOrderDialog");
+            }
+        });
     }
 
     @Override
@@ -170,11 +178,14 @@ public class MainActivity extends AppCompatActivity {
         return super.onContextItemSelected(item);
     }
 
-
+    @Override
+    public void onNewOrderCreated(Order newOrder) {
+        courier.addOrder(newOrder);
+        adapter.notifyDataSetChanged();
+    }
 
     private void showInfo(double cost) {
         Toast.makeText(this, "Общая стоимость: " + cost, Toast.LENGTH_LONG).show();
     }
-
 
 }
