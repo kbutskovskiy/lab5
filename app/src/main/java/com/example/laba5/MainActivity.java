@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //#TODO: В рамках одной сессии у курьера есть кнопка принять. Все заказы , которые были выбраны,
-//#TODO: уходят в меню курьера, которое можно посмотреть контекстное меню ContextMenu. И ещё в качестве админа возможность создать заказ.
+//#TODO: уходят в меню курьера, которое можно посмотреть контекстное меню ContextMenu.
 public class MainActivity extends AppCompatActivity implements NewOrderDialog.OnNewOrderListener{
 
     //курьер
@@ -142,14 +142,14 @@ public class MainActivity extends AppCompatActivity implements NewOrderDialog.On
             }
         });
 
-        Button btnAdd = findViewById(R.id.button_add);
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NewOrderDialog newOrderDialog = new NewOrderDialog();
-                newOrderDialog.show(getSupportFragmentManager(), "newOrderDialog");
-            }
-        });
+        //Button btnAdd = findViewById(R.id.button_add);
+//        btnAdd.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                NewOrderDialog newOrderDialog = new NewOrderDialog();
+//                newOrderDialog.show(getSupportFragmentManager(), "newOrderDialog");
+//            }
+//        });
     }
 
     @Override

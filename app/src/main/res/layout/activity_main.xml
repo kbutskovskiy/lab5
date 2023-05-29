@@ -179,12 +179,12 @@
         android:backgroundTint="@color/orange"
         android:text="Заказы" />
 
-    <Button
+    <!--<Button
         android:id="@+id/button_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/orange"
-        android:text="Add Order" />
+        android:text="Add Order" />-->
 
     <Button
         android:id="@+id/button_ok"
